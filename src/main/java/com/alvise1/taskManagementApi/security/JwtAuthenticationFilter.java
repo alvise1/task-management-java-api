@@ -45,6 +45,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String username = jwtTokenProvider.getUsernameFromJwt(jwt);
                 Authentication authentication = jwtTokenProvider.getAuthentication(username);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+            } else {
+                sendErrorResponse(response, "Invalid JWT token.");
+                return;
             }
         }
 
