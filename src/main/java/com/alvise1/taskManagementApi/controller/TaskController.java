@@ -32,7 +32,11 @@ public class TaskController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<Task>> getTaskById(@PathVariable Long id) {
-        Optional<Task> task = taskService.getTaskById(id);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Optional<Task> task = taskService.getTaskById(id, username);
+
         return task.map(t -> ResponseEntity.ok(new ApiResponse<>(t, "Task retrieved successfully.", true)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(new ApiResponse<>(null, "Task not found.", false)));
@@ -51,19 +55,30 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Task>> updateTask(@PathVariable Long id, @Valid @RequestBody Task taskDetails) {
-        Task updatedTask = taskService.updateTask(id, taskDetails);
-        if (updatedTask != null) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        try {
+            Task updatedTask = taskService.updateTask(id, taskDetails, username);
             return ResponseEntity.ok(new ApiResponse<>(updatedTask, "Task updated successfully.", true));
-        } else {
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ApiResponse<>(null, "Task not found.", false));
+                    .body(new ApiResponse<>(null, e.getMessage(), false));
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteTask(@PathVariable Long id) {
-        taskService.deleteTask(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .body(new ApiResponse<>(null, "Task deleted successfully.", true));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        try {
+            taskService.deleteTask(id, username);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ApiResponse<>(null, "Task deleted successfully.", true));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(null, e.getMessage(), false));
+        }
     }
 }

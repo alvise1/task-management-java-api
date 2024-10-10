@@ -1,5 +1,7 @@
 package com.alvise1.taskManagementApi.security;
 
+import com.alvise1.taskManagementApi.exception.CustomAccessDeniedHandler;
+import com.alvise1.taskManagementApi.exception.CustomAuthenticationDeniedHandler;
 import com.alvise1.taskManagementApi.service.CustomUserDetailService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
+
+    @Autowired
+    private CustomAuthenticationDeniedHandler authenticationEntryPoint;
+
+    @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
@@ -33,6 +41,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/register", "/api/users/login").permitAll() // Public endpoints
                         .anyRequest().authenticated() // All other requests must be authenticated
+                )
+                .exceptionHandling( exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
