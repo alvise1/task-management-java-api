@@ -18,6 +18,8 @@ import jakarta.validation.Valid;
 import org.springframework.security.authentication.BadCredentialsException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import com.alvise1.taskManagementApi.model.ChangePasswordRequest;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -74,6 +76,19 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ApiResponse<>(null, "Token not found", false));
+        }
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<ApiResponse<Void>> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        try {
+            userService.changePassword(username, changePasswordRequest.getCurrentPassword(), changePasswordRequest.getNewPassword());
+            return ResponseEntity.ok(new ApiResponse<>(null, "Password changed successfully!", true));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(null, e.getMessage(), false));
         }
     }
 }

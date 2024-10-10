@@ -50,4 +50,18 @@ public class UserService {
     public AppUser findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public void changePassword(String username, String currentPassword, String newPassword) {
+        AppUser appUser = findByUsername(username);
+        if (appUser == null) {
+            throw new IllegalArgumentException("User not found!");
+        }
+        if (!passwordEncoder.matches(currentPassword, appUser.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect!");
+        }
+
+        validatePassword(newPassword);
+        appUser.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(appUser);
+    }
 }
