@@ -57,4 +57,8 @@ public class TaskService {
         }
         taskRepository.deleteById(id);
     }
+
+    public void deleteTasksByUser(AppUser appUser) {
+        taskRepository.deleteByAppUser(appUser);
+    }
 }

@@ -91,4 +91,16 @@ public class UserController {
                     .body(new ApiResponse<>(null, e.getMessage(), false));
         }
     }
+
+    @PostMapping("/delete")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse<>(null, "User not authenticated.", false));
+        }
+        userService.deleteUser(username);
+        return ResponseEntity.ok(new ApiResponse<>(null, "User deleted successfully.", true));
+    }
 }

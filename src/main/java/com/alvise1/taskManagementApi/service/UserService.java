@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.regex.Pattern;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -15,6 +16,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private TaskService taskService;
 
     private void validatePassword(String password) {
         if (password == null || password.isEmpty()) {
@@ -63,5 +67,13 @@ public class UserService {
         validatePassword(newPassword);
         appUser.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(appUser);
+    }
+
+    @Transactional
+    public void deleteUser(String username) {
+        AppUser appUser = findByUsername(username);
+        if (appUser == null) {throw new IllegalArgumentException("User not found!");}
+        taskService.deleteTasksByUser(appUser);
+        userRepository.delete(appUser);
     }
 }
