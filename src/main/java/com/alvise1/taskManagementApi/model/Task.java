@@ -1,9 +1,7 @@
 package com.alvise1.taskManagementApi.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -23,6 +21,12 @@ public class Task {
     @Min(1)
     @Max(3)
     private short priority;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private AppUser appUser;
+
+    private String username;
 
     public Long getId() {
         return id;
@@ -70,5 +74,13 @@ public class Task {
 
     public void setPriority(short priority) {
         this.priority = priority;
+    }
+
+    public String getUsername() { // Getter for username
+        return username;
+    }
+
+    public void setUsername(String username) { // Setter for username
+        this.username = username;
     }
 }

@@ -1,11 +1,12 @@
 package com.alvise1.taskManagementApi.service;
 
 import com.alvise1.taskManagementApi.model.Task;
+import com.alvise1.taskManagementApi.model.AppUser;
 import com.alvise1.taskManagementApi.repository.TaskRepository;
+import com.alvise1.taskManagementApi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,21 +16,28 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+    @Autowired
+    private UserRepository userRepository;
+
+    public List<Task> getAllTasks(String username) {
+        //AppUser user = userRepository.findByUsername(username);
+        return taskRepository.findByUsername(username);
     }
 
     public Optional<Task> getTaskById(Long id) {
         return taskRepository.findById(id);
     }
 
-    public Task createTask (Task task) {
+    public Task createTask(Task task, String username) {
+        task.setUsername(username);
         return taskRepository.save(task);
     }
 
     public Task updateTask(Long id, Task taskDetails) {
+        if (taskDetails == null) {
+            throw new IllegalArgumentException("Task details cannot be null.");
+        }
         Optional<Task> optionalTask = taskRepository.findById(id);
-
         if (optionalTask.isPresent()) {
             Task task = optionalTask.get();
             task.setTitle(taskDetails.getTitle());
@@ -39,11 +47,14 @@ public class TaskService {
             task.setPriority(taskDetails.getPriority());
             return taskRepository.save(task);
         } else {
-            return null;
+            throw new IllegalArgumentException("Task with ID " + id + " not found.");
         }
     }
 
     public void deleteTask(Long id) {
+        if (!taskRepository.existsById(id)) {
+            throw new IllegalArgumentException("Task with ID " + id + " does not exist.");
+        }
         taskRepository.deleteById(id);
     }
 }
