@@ -1,7 +1,6 @@
 package com.alvise1.taskManagementApi.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -18,8 +17,8 @@ public class Task {
     private LocalDate dueDate;
     private boolean completed;
 
-    @Min(1)
-    @Max(3)
+    @Min(value = 1, message = "Priority must be at least 1")
+    @Max(value = 3, message = "Priority must be at most 3")
     private short priority;
 
     @ManyToOne
