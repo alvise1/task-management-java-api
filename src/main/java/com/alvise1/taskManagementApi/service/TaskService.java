@@ -20,7 +20,8 @@ public class TaskService {
     private UserRepository userRepository;
 
     public List<Task> getAllTasks(String username) {
-        return taskRepository.findByUsername(username);
+        AppUser user = userRepository.findByUsername(username);
+        return taskRepository.findByAppUser(user);
     }
 
     public Optional<Task> getTaskById(Long id) {
@@ -28,7 +29,8 @@ public class TaskService {
     }
 
     public Task createTask(Task task, String username) {
-        task.setUsername(username);
+        AppUser user = userRepository.findByUsername(username);
+        task.setAppUser(user);
         return taskRepository.save(task);
     }
 

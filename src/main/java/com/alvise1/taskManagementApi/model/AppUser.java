@@ -2,6 +2,7 @@ package com.alvise1.taskManagementApi.model;
 
 import jakarta.persistence.*;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "app_user")
@@ -15,6 +16,7 @@ public class AppUser {
     private String password;
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Task> tasks;
 
     public Long getId() {
