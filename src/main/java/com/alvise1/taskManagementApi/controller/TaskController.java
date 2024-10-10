@@ -31,7 +31,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<Task>> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Task>> getTaskById(@Valid @PathVariable Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
@@ -54,7 +54,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<Task>> updateTask(@PathVariable Long id, @Valid @RequestBody Task taskDetails) {
+    public ResponseEntity<ApiResponse<Task>> updateTask(@Valid @PathVariable Long id, @Valid @RequestBody Task taskDetails) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
@@ -68,7 +68,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteTask(@Valid @PathVariable Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 

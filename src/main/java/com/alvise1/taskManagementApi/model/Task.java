@@ -2,8 +2,8 @@ package com.alvise1.taskManagementApi.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Task {
@@ -12,9 +12,16 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Title is mandatory")
+    @Size(max = 50, message = "Title cannot exceed 50 characters")
     private String title;
+
+    @Size(max = 500, message = "Description can't exceed 500 characters")
     private String description;
+
+    @FutureOrPresent(message = "Due date cannot be in the past")
     private LocalDate dueDate;
+
     private boolean completed;
 
     @Min(value = 1, message = "Priority must be at least 1")

@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import com.alvise1.taskManagementApi.model.ChangePasswordRequest;
 
 
 @RestController
+@Validated
 @RequestMapping("/api/users")
 public class UserController {
 
@@ -53,7 +55,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ApiResponse<String>> login(@RequestBody AppUser appUser) {
+    public ResponseEntity<ApiResponse<String>> login(@Valid @RequestBody AppUser appUser) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(appUser.getUsername(), appUser.getPassword())
