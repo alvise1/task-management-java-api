@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository; // Make sure to inject your user repository
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -20,11 +20,10 @@ public class CustomUserDetailService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException("User not found: " + username);
         }
-        // You should return a UserDetails object here
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
-                .password(user.getPassword()) // Ensure password is encoded
-                .authorities("ROLE_USER") // You can customize roles
+                .password(user.getPassword())
+                .authorities("ROLE_USER")
                 .build();
     }
 }
