@@ -13,7 +13,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // Use PasswordEncoder interface
+    private PasswordEncoder passwordEncoder;
 
     public AppUser registerUser(String username, String password) {
         if (userRepository.findByUsername(username) != null) {
@@ -24,7 +24,6 @@ public class UserService {
         appUser.setPassword(passwordEncoder.encode(password));
         return userRepository.save(appUser);
     }
-
 
     public AppUser findByUsername(String username) {
         return userRepository.findByUsername(username);

@@ -1,6 +1,6 @@
 package com.alvise1.taskManagementApi.controller;
 
-import com.alvise1.taskManagementApi.model.ApiResponse; // Import ApiResponse
+import com.alvise1.taskManagementApi.model.ApiResponse;
 import com.alvise1.taskManagementApi.security.JwtTokenProvider;
 import com.alvise1.taskManagementApi.model.AppUser;
 import com.alvise1.taskManagementApi.service.UserService;

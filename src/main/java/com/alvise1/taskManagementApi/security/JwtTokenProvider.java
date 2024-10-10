@@ -26,7 +26,6 @@ public class JwtTokenProvider {
         this.jwtSecretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
-    // Generate JWT Token
     public String generateToken(String username) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
@@ -44,7 +43,7 @@ public class JwtTokenProvider {
             Jwts.parserBuilder()
                     .setSigningKey(jwtSecretKey)
                     .build()
-                    .parseClaimsJws(token); // Corrected method for signed tokens
+                    .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;

@@ -24,13 +24,9 @@ public class TaskController {
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<Task>>> getAllTasks() {
-        // Get the authentication object
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // Get the username of the logged-in user
-
-        // Retrieve tasks for the authenticated user
         List<Task> tasks = taskService.getAllTasks(username);
-
         return ResponseEntity.ok(new ApiResponse<>(tasks, "Tasks retrieved successfully.", true));
     }
 
@@ -44,11 +40,9 @@ public class TaskController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Task>> createTask(@Valid @RequestBody Task task) {
-        // Get the authentication object
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName(); // Get the username of the logged-in user
+        String username = authentication.getName();
 
-        // Create the task and associate it with the logged-in user
         Task createdTask = taskService.createTask(task, username);
 
         return ResponseEntity.status(HttpStatus.CREATED)

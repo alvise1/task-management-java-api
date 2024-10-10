@@ -24,7 +24,6 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private AppUser appUser;
 
     private String username;
 
@@ -76,11 +75,11 @@ public class Task {
         this.priority = priority;
     }
 
-    public String getUsername() { // Getter for username
+    public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) { // Setter for username
+    public void setUsername(String username) {
         this.username = username;
     }
 }

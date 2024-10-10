@@ -20,7 +20,6 @@ public class TaskService {
     private UserRepository userRepository;
 
     public List<Task> getAllTasks(String username) {
-        //AppUser user = userRepository.findByUsername(username);
         return taskRepository.findByUsername(username);
     }
 

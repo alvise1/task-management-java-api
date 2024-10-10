@@ -11,7 +11,6 @@ public class ApiResponse<T> {
         this.success = success;
     }
 
-    // Getters and setters
     public T getData() {
         return data;
     }
