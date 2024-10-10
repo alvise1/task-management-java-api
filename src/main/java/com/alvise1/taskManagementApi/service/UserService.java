@@ -1,6 +1,7 @@
 package com.alvise1.taskManagementApi.service;
 
 import com.alvise1.taskManagementApi.model.AppUser;
+import com.alvise1.taskManagementApi.repository.TaskRepository;
 import com.alvise1.taskManagementApi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,10 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private TaskRepository taskRepository;
 
     @Autowired
-    private TaskService taskService;
+    private PasswordEncoder passwordEncoder;
 
     private void validatePassword(String password) {
         if (password == null || password.isEmpty()) {
@@ -73,7 +74,7 @@ public class UserService {
     public void deleteUser(String username) {
         AppUser appUser = findByUsername(username);
         if (appUser == null) {throw new IllegalArgumentException("User not found!");}
-        taskService.deleteTasksByUser(appUser);
+        taskRepository.deleteByAppUser(appUser);
         userRepository.delete(appUser);
     }
 }
