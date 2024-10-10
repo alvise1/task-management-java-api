@@ -46,6 +46,7 @@ public class UserService {
         return userRepository.save(appUser);
     }
 
+    // I need to refactor code to use this method instead of directly using repository
     public AppUser findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

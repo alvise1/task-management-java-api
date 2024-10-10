@@ -1,8 +1,10 @@
 package com.alvise1.taskManagementApi.controller;
 
 import com.alvise1.taskManagementApi.model.ApiResponse;
+import com.alvise1.taskManagementApi.security.JwtAuthenticationFilter;
 import com.alvise1.taskManagementApi.security.JwtTokenProvider;
 import com.alvise1.taskManagementApi.model.AppUser;
+import com.alvise1.taskManagementApi.service.TokenBlacklistService;
 import com.alvise1.taskManagementApi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.BadCredentialsException;
+import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/users")
@@ -27,6 +31,12 @@ public class UserController {
 
     @Autowired
     private JwtTokenProvider tokenProvider;
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<AppUser>> registerUser(@Valid @RequestBody AppUser appUser) {
@@ -52,6 +62,18 @@ public class UserController {
         } catch (BadCredentialsException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new ApiResponse<>(null, "Invalid username or password.", false));
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request) {
+        String jwt = jwtAuthenticationFilter.getJwtFromRequest(request);
+        if (jwt != null) {
+            tokenBlacklistService.addTokenToBlacklist(jwt, LocalDateTime.now());
+            return ResponseEntity.ok(new ApiResponse<>(null,"Logout successful!", true));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse<>(null, "Token not found", false));
         }
     }
 }

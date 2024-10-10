@@ -1,6 +1,6 @@
 package com.alvise1.taskManagementApi.controller;
 
-import com.alvise1.taskManagementApi.model.ApiResponse; // Import ApiResponse
+import com.alvise1.taskManagementApi.model.ApiResponse;
 import com.alvise1.taskManagementApi.model.Task;
 import com.alvise1.taskManagementApi.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class TaskController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<Task>>> getAllTasks() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName(); // Get the username of the logged-in user
+        String username = authentication.getName();
         List<Task> tasks = taskService.getAllTasks(username);
         return ResponseEntity.ok(new ApiResponse<>(tasks, "Tasks retrieved successfully.", true));
     }
