@@ -7,22 +7,21 @@ This is a simple Task Management API built using Java and Spring Boot.
 - User authentication - Spring Security
 - Create, read, update, and delete tasks
 - Store tasks with details like title, description, due date, and status
-- PostgreSQL database for storing tasks
+- PostgreSQL database for storing tasks (although any SQL db will work)
 
 ## Technology Stack
-- **Java**: Programming language
+- **Java**
 - **Spring Boot**: Framework for building the API
-- **Maven**: Dependency management (not strictly necessary)
-- **PostgreSQL**: Relational database for persistent storage
+- **Maven**: Dependency management
+- **PostgreSQL**
 - **Postman**: For testing API endpoints
-- **GitHub**: Version control
 
 ## Getting Started
 
 ### Prerequisites
+- Git installed
 - JDK 11 or higher
 - Maven installed
-- Git installed
 - PostgreSQL installed and running
 
 ### Setup Instructions
